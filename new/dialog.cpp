@@ -145,12 +145,13 @@ void Dialog::on_btn_alkotest_clicked()
 
     int mq3      = citajADC(MQ3_KANAL);
     // Ispod granice = 0%, iznad = skalira od bazne vrednosti (94) do 255
+    // MQ3: vrednost IDE DOLE kada detektuje alkohol
     int procenat = 0;
-    if (mq3 > ALKOHOL_GRANICA)
-        procenat = ((mq3 - ALKOHOL_GRANICA) * 100) / (255 - ALKOHOL_GRANICA);
+    if (mq3 < ALKOHOL_GRANICA)
+        procenat = ((ALKOHOL_GRANICA - mq3) * 100) / ALKOHOL_GRANICA;
     ui->pb_alkohol->setValue(procenat);
 
-    if (mq3 > ALKOHOL_GRANICA) {
+    if (mq3 < ALKOHOL_GRANICA) {
         ui->pb_alkohol->setValue(procenat);
         ui->pb_alkohol->setStyleSheet("QProgressBar::chunk { background-color: red; }");
         ui->lbl_slikaStatus->setScaledContents(true);

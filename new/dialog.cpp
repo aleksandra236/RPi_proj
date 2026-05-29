@@ -107,7 +107,7 @@ void Dialog::updateSmena(int ldr)
 {
     // lbl_smena je naslov - ne diramo ga, uvek pise "Smena"
     // lbl_slikaSmena prikazuje sliku dnevna.png ili nocna.png
-    if (ldr > LDR_DAN) {
+    if (ldr < LDR_DAN) {
         ui->lbl_slikaSmena->setPixmap(QPixmap(":/slike/dnevna.png"));
     } else {
         ui->lbl_slikaSmena->setPixmap(QPixmap(":/slike/nocna.png"));

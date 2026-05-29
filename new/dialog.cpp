@@ -31,8 +31,6 @@ Dialog::Dialog(const Vozac &vozac, QWidget *parent)
     ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/nema.png"));
     ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdnema.png"));
     ui->lbl_led->setPixmap(QPixmap(":/slike/svetle.png"));
-
-    ui->lbl_status->setText("Vozac prijavljen. Uradite alkotest.");
     ui->pb_alkohol->setValue(0);
 
     initGPIO();
@@ -150,16 +148,12 @@ void Dialog::on_btn_alkotest_clicked()
     ui->pb_alkohol->setValue(procenat);
 
     if (mq3 > ALKOHOL_GRANICA) {
-        ui->lbl_status->setText("ALKOHOL DETEKTOVAN");
-        ui->lbl_status->setStyleSheet("color: red; font-weight: bold;");
         ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/detektovan.png"));
         ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdima.png"));
         ui->pb_alkohol->setStyleSheet("QProgressBar::chunk { background-color: red; }");
         lcdIspisaj("ALKOHOL DETEKT.", "ZAKLJUCANO");
         blinkTimer->start(300);
     } else {
-        ui->lbl_status->setText("NEMA ALKOHOLA");
-        ui->lbl_status->setStyleSheet("color: green; font-weight: bold;");
         ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/nema.png"));
         ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdnema.png"));
         ui->pb_alkohol->setStyleSheet("QProgressBar::chunk { background-color: green; }");

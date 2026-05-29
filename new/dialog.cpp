@@ -106,17 +106,11 @@ void Dialog::updateDatum()
 
 void Dialog::updateSmena(int ldr)
 {
+    // lbl_smena je naslov - ne diramo ga, uvek pise "Smena"
+    // lbl_slikaSmena prikazuje sliku dnevna.png ili nocna.png
     if (ldr > LDR_DAN) {
-        ui->lbl_smena->setText("DNEVNA VOZNJA");
-        ui->lbl_smena->setStyleSheet(
-            "background-color: #ffffc0; color: #806000; "
-            "border: 1px solid gray; padding: 2px 6px; font-weight: bold;");
         ui->lbl_slikaSmena->setPixmap(QPixmap(":/slike/dnevna.png"));
     } else {
-        ui->lbl_smena->setText("NOCNA VOZNJA");
-        ui->lbl_smena->setStyleSheet(
-            "background-color: #1c1c3a; color: #9999ff; "
-            "border: 1px solid #7777cc; padding: 2px 6px; font-weight: bold;");
         ui->lbl_slikaSmena->setPixmap(QPixmap(":/slike/nocna.png"));
     }
 }
@@ -161,7 +155,7 @@ void Dialog::on_btn_alkotest_clicked()
         ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/detektovan.png"));
         ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdima.png"));
         ui->pb_alkohol->setStyleSheet("QProgressBar::chunk { background-color: red; }");
-        lcdIspisaj("ALKOHOL DETEKT.", "VOZILO ZAKLJ.");
+        lcdIspisaj("ALKOHOL DETEKT.", "ZAKLJUCANO");
         blinkTimer->start(300);
     } else {
         ui->lbl_status->setText("NEMA ALKOHOLA");
@@ -169,7 +163,7 @@ void Dialog::on_btn_alkotest_clicked()
         ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/nema.png"));
         ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdnema.png"));
         ui->pb_alkohol->setStyleSheet("QProgressBar::chunk { background-color: green; }");
-        lcdIspisaj("NEMA ALKOHOLA", "VOZILO OTKLJ.");
+        lcdIspisaj("NEMA ALKOHOLA", "OTKLJUCANO");
         blinkTimer->stop();
         setLED(true);
     }

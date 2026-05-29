@@ -144,19 +144,32 @@ void Dialog::on_btn_alkotest_clicked()
     QMessageBox::information(this, "Alkotest", "Duvajte u uredjaj...");
 
     int mq3      = citajADC(MQ3_KANAL);
-    int procenat = (mq3 * 100) / 255;
+    // Ispod granice = 0%, iznad = skalira od bazne vrednosti (94) do 255
+    int procenat = 0;
+    if (mq3 > ALKOHOL_GRANICA)
+        procenat = ((mq3 - ALKOHOL_GRANICA) * 100) / (255 - ALKOHOL_GRANICA);
     ui->pb_alkohol->setValue(procenat);
 
     if (mq3 > ALKOHOL_GRANICA) {
-        ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/detektovan.png"));
-        ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdima.png"));
+        ui->pb_alkohol->setValue(procenat);
         ui->pb_alkohol->setStyleSheet("QProgressBar::chunk { background-color: red; }");
+        ui->lbl_slikaStatus->setScaledContents(true);
+        ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/detektovan.png"));
+        ui->lbl_lcd->setScaledContents(true);
+        ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdima.png"));
+        ui->lbl_slikaStatus->repaint();
+        ui->lbl_lcd->repaint();
         lcdIspisaj("ALKOHOL DETEKT.", "ZAKLJUCANO");
         blinkTimer->start(300);
     } else {
-        ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/nema.png"));
-        ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdnema.png"));
+        ui->pb_alkohol->setValue(0);
         ui->pb_alkohol->setStyleSheet("QProgressBar::chunk { background-color: green; }");
+        ui->lbl_slikaStatus->setScaledContents(true);
+        ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/nema.png"));
+        ui->lbl_lcd->setScaledContents(true);
+        ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdnema.png"));
+        ui->lbl_slikaStatus->repaint();
+        ui->lbl_lcd->repaint();
         lcdIspisaj("NEMA ALKOHOLA", "OTKLJUCANO");
         blinkTimer->stop();
         setLED(true);

@@ -22,7 +22,7 @@ extern int fdRTCC_global;
 
 #define MQ3_KANAL        0
 #define LDR_KANAL        3
-#define ALKOHOL_GRANICA  60
+#define ALKOHOL_GRANICA  120
 #define LDR_DAN          100
 
 

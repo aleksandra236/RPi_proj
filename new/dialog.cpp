@@ -21,14 +21,16 @@ Dialog::Dialog(const Vozac &vozac, QWidget *parent)
     ui->le_jmbg->setText(vozac.jmbg);
     ui->le_brojlk->setText(vozac.brojLK);
 
-    ui->lbl_slikaSmena->setPixmap(
-        QPixmap(":/dnevna.png").scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    ui->lbl_slikaStatus->setPixmap(
-        QPixmap(":/nema.png").scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    ui->lbl_lcd->setPixmap(
-        QPixmap(":/lcdnema.png").scaled(120, 60, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    ui->lbl_led->setPixmap(
-        QPixmap(":/svetli.png").scaled(80, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    // setScaledContents - Qt sam skalira sliku da popuni labelu
+    ui->lbl_slikaSmena->setScaledContents(true);
+    ui->lbl_slikaStatus->setScaledContents(true);
+    ui->lbl_lcd->setScaledContents(true);
+    ui->lbl_led->setScaledContents(true);
+
+    ui->lbl_slikaSmena->setPixmap(QPixmap(":/slike/dnevna.png"));
+    ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/nema.png"));
+    ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdnema.png"));
+    ui->lbl_led->setPixmap(QPixmap(":/slike/svetle.png"));
 
     ui->lbl_status->setText("Vozac prijavljen. Uradite alkotest.");
     ui->pb_alkohol->setValue(0);
@@ -109,15 +111,13 @@ void Dialog::updateSmena(int ldr)
         ui->lbl_smena->setStyleSheet(
             "background-color: #ffffc0; color: #806000; "
             "border: 1px solid gray; padding: 2px 6px; font-weight: bold;");
-        ui->lbl_slikaSmena->setPixmap(
-            QPixmap(":/dnevna.png").scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        ui->lbl_slikaSmena->setPixmap(QPixmap(":/slike/dnevna.png"));
     } else {
         ui->lbl_smena->setText("NOCNA VOZNJA");
         ui->lbl_smena->setStyleSheet(
             "background-color: #1c1c3a; color: #9999ff; "
             "border: 1px solid #7777cc; padding: 2px 6px; font-weight: bold;");
-        ui->lbl_slikaSmena->setPixmap(
-            QPixmap(":/nocna.png").scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        ui->lbl_slikaSmena->setPixmap(QPixmap(":/slike/nocna.png"));
     }
 }
 
@@ -127,10 +127,7 @@ void Dialog::setLED(bool ukljucene)
     digitalWrite(21, v);
     digitalWrite(10, v);
     digitalWrite(11, v);
-
-    ui->lbl_led->setPixmap(
-        QPixmap(ukljucene ? ":/svetli.png" : ":/blink.png").scaled(
-            80, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->lbl_led->setPixmap(QPixmap(ukljucene ? ":/slike/svetle.png" : ":/slike/blink.png"));
 }
 
 void Dialog::blinkLED()
@@ -140,10 +137,7 @@ void Dialog::blinkLED()
     digitalWrite(21, v);
     digitalWrite(10, v);
     digitalWrite(11, v);
-
-    ui->lbl_led->setPixmap(
-        QPixmap(blinkStanje ? ":/blink.png" : ":/svetli.png").scaled(
-            80, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->lbl_led->setPixmap(QPixmap(blinkStanje ? ":/slike/blink.png" : ":/slike/svetle.png"));
 }
 
 void Dialog::onTimer()
@@ -164,20 +158,16 @@ void Dialog::on_btn_alkotest_clicked()
     if (mq3 > ALKOHOL_GRANICA) {
         ui->lbl_status->setText("ALKOHOL DETEKTOVAN");
         ui->lbl_status->setStyleSheet("color: red; font-weight: bold;");
-        ui->lbl_slikaStatus->setPixmap(
-            QPixmap(":/detektovan.png").scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        ui->lbl_lcd->setPixmap(
-            QPixmap(":/lcdima.png").scaled(120, 60, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/detektovan.png"));
+        ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdima.png"));
         ui->pb_alkohol->setStyleSheet("QProgressBar::chunk { background-color: red; }");
         lcdIspisaj("ALKOHOL DETEKT.", "VOZILO ZAKLJ.");
         blinkTimer->start(300);
     } else {
         ui->lbl_status->setText("NEMA ALKOHOLA");
         ui->lbl_status->setStyleSheet("color: green; font-weight: bold;");
-        ui->lbl_slikaStatus->setPixmap(
-            QPixmap(":/nema.png").scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        ui->lbl_lcd->setPixmap(
-            QPixmap(":/lcdnema.png").scaled(120, 60, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        ui->lbl_slikaStatus->setPixmap(QPixmap(":/slike/nema.png"));
+        ui->lbl_lcd->setPixmap(QPixmap(":/slike/lcdnema.png"));
         ui->pb_alkohol->setStyleSheet("QProgressBar::chunk { background-color: green; }");
         lcdIspisaj("NEMA ALKOHOLA", "VOZILO OTKLJ.");
         blinkTimer->stop();

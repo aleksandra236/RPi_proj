@@ -59,9 +59,10 @@ Dialog::~Dialog()
 
 void Dialog::initGPIO()
 {
-    pinMode(21, OUTPUT); digitalWrite(21, LOW);
-    pinMode(10, OUTPUT); digitalWrite(10, LOW);
-    pinMode(11, OUTPUT); digitalWrite(11, LOW);
+    pinMode(25, OUTPUT); digitalWrite(25, LOW);
+    pinMode(26, OUTPUT); digitalWrite(26, LOW);
+    pinMode(27, OUTPUT); digitalWrite(27, LOW);
+    pinMode(28, OUTPUT); digitalWrite(28, LOW);
 }
 
 void Dialog::initLCD()
@@ -116,9 +117,10 @@ void Dialog::updateSmena(int ldr)
 void Dialog::setLED(bool ukljucene)
 {
     int v = ukljucene ? HIGH : LOW;
-    digitalWrite(21, v);
-    digitalWrite(10, v);
-    digitalWrite(11, v);
+    digitalWrite(25, v);
+    digitalWrite(26, v);
+    digitalWrite(27, v);
+    digitalWrite(28, v);
     ui->lbl_led->setPixmap(QPixmap(ukljucene ? ":/slike/svetle.png" : ":/slike/blink.png"));
 }
 
@@ -126,9 +128,10 @@ void Dialog::blinkLED()
 {
     blinkStanje = !blinkStanje;
     int v = blinkStanje ? HIGH : LOW;
-    digitalWrite(21, v);
-    digitalWrite(10, v);
-    digitalWrite(11, v);
+    digitalWrite(25, v);
+    digitalWrite(26, v);
+    digitalWrite(27, v);
+    digitalWrite(28, v);
     ui->lbl_led->setPixmap(QPixmap(blinkStanje ? ":/slike/blink.png" : ":/slike/svetle.png"));
 }
 
@@ -146,8 +149,10 @@ void Dialog::on_btn_alkotest_clicked()
     int mq3      = citajADC(MQ3_KANAL);
     // Ispod granice = 0%, iznad = skalira od bazne vrednosti (94) do 255
     int procenat = 0;
-    if (mq3 > ALKOHOL_GRANICA)
+    if (mq3 > ALKOHOL_GRANICA) {
         procenat = ((mq3 - ALKOHOL_GRANICA) * 100) / (255 - ALKOHOL_GRANICA);
+        if (procenat == 0) procenat = 1; // minimum 1% kad je detektovan
+    }
     ui->pb_alkohol->setValue(procenat);
 
     if (mq3 > ALKOHOL_GRANICA) {
